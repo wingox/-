@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+            list-style: none;
+        }
+        ul {
+            width: 480px;                       
+        }
+        ul li {
+           width: 200px;
+           height: 50px;
+           background: darkred;            
+           margin: 10px; 
+        }
+        div {
+            position: absolute;
+            top: 500px;
+            left: 20px;            
+        }
+    </style>
+</head>
+<body>    
+    <ul id="ul1"></ul>
+    <div id="div1"></div>
+    <script src="move.js"></script>
+    <script>
+        function page(json) {
+            if (!json.id) return false;
+            var $Div = document.getElementById(json.id);            
+            var nowNum = json.nowNum || 1;
+            var allNum = json.allNum || 5;
+            
+            // 首页
+            if (nowNum > 5 && allNum >= 10) {
+                var $A = document.createElement('a');
+                $A.href = '#1';
+                $A.innerHTML = '首页';
+                $Div.appendChild($A);
+            }                        
+            //上一页
+            if (nowNum > 1) {
+                var $A = document.createElement('a');
+                $A.href = '#' + (nowNum - 1); 
+                $A.innerHTML = '上一页';
+                $Div.appendChild($A);                
+            }
+             
+            // 9个一组
+            if (allNum <= 9) {
+                for (var i = 1; i <= allNum; i++) {
+                    var $A = document.createElement('a');
+                    $A.href = '#' + i;
+                    if (nowNum === i) {
+                        $A.innerHTML = i;
+                    }else {
+                        $A.innerHTML = '[' + i + ']';    
+                    }                    
+                    $Div.appendChild($A);
+                }
+            }else {
+                // 以nowNum数为中心 一共 9个数  向左右两侧扩散5 - 1 个数
+                for (var i = 1; i <= 9; i++) {
+                    var $A = document.createElement('a');
+                    // 当前页数 小于5 时 向左扩散会出现小于1的书 要做特殊处理
+                    if (nowNum < 5) {
+                        $A.href = '#' + i;
+                        if (nowNum === i) {
+                            $A.innerHTML = i;
+                        }else {
+                            $A.innerHTML = '[' + i + ']';     
+                        }                          
+                    }else if (allNum - nowNum < 4) {
+                        // 最后几页向右扩散 时也会出问题  所以阻止扩散 只显示最后九页                        
+                        $A.href = '#' + (allNum - 9 + i);
+                        // 特殊处理后4几页
+                        if ( (allNum - nowNum) === 0 && i === 9 ) {
+                            $A.innerHTML = allNum - 9 + i; 
+                        }else if ( (allNum - nowNum) === 1 && i === 8 ) {
+                            $A.innerHTML = allNum - 9 + i; 
+                        }else if ( (allNum - nowNum) === 2 && i === 7 ) {
+                            $A.innerHTML = allNum - 9 + i; 
+                        }
+                        else if ( (allNum - nowNum) === 3 && i === 6 ) {
+                            $A.innerHTML = allNum - 9 + i; 
+                        }        
+                                                                                            
+                        else {
+                            $A.innerHTML = '['+ (allNum - 9 + i) + ']';                            
+                        }                                                 
+                    }
+                    // 正常处理方式 以nowNum为中心 向两侧扩散 4个数
+                    else {
+                        $A.href = '#' + (nowNum - 5 + i); 
+                        if (i === 5) {
+                            $A.innerHTML = nowNum - 5 + i;
+                        }else {
+                            $A.innerHTML = '[' + ( nowNum - 5 + i ) + ']';
+                        }    
+                    }
+                    $Div.appendChild($A);                      
+                }
+            }    
+            
+            // 尾页
+            if ( (allNum - nowNum) > 5) {
+                var $A = document.createElement('a');
+                $A.href = '#' + allNum;
+                $A.innerHTML = '尾页';
+                $Div.appendChild($A);                
+            }
+            // 下一页
+            if ((allNum -nowNum) > 0) {
+                var $A = document.createElement('a');
+                $A.href = '#' + (nowNum + 1); 
+                $A.innerHTML = '下一页';
+                $Div.appendChild($A);                 
+            }                                    
+            var $All = document.getElementsByTagName('a');            
+            for (var i = 0; i < $All.length; i++) {
+                $All[i].onclick = function () {                    
+                    var nowNum = parseInt(this.getAttribute('href').substring(1));
+                    $Div.innerHTML = '';
+                    json.nowNum = nowNum;
+                    page(json);                
+                }
+            }    
+           //回调函数
+           json.callBack(nowNum, allNum);                                                                                                                               
+        }        
+        var json = {
+            title: [
+                'result 1',
+                'result 2',
+                'result 3',
+                'result 4',
+                'result 5',
+                'result 6',
+                'result 7',
+                'result 8',
+                'result 9',
+                'result 10',
+                'result 11',
+                'result 12',
+                'result 13',
+                'result 14',
+                'result 15',
+                'result 16',
+                'result 17',
+                'result 18',
+                'result 19',
+                'result 20',
+                'result 21',
+                'result 22',
+                'result 23',  
+                'result 24',
+                'result 25',  
+                'result 26',
+                'result 27',  
+                'result 28',
+                'result 29',  
+                'result 30',
+                'result 31',  
+                'result 32',
+                'result 33',
+                'result 34',  
+                'result 35',
+                'result 36',   
+                'result 37',  
+                'result 38',
+                'result 39', 
+                'result 40',  
+                'result 41',
+                'result 42',
+                'result 43',  
+                'result 44'                                                                                                                                                                                                              
+            ]
+        }
+        
+        var arr = [];
+        var iNow = 8 - 1;
+        
+        page({
+            id: 'div1',
+            nowNum: 1,
+            allNum: Math.ceil(json.title.length / 8),
+            callBack: function (now, all) {                        
+                var num = now * 8 < json.title.length ? 8 : json.title.length % 8;
+                var $Ul = document.getElementById('ul1');   
+                var $LiCollection = document.getElementsByTagName('li');                                         
+                if ($Ul.innerHTML === '') {                                       
+                    for (var i = 0; i < num; i++) {
+                        var $Li = document.createElement('li');
+                        $Li.innerHTML = json.title[(now - 1) * 8 + i];
+                        $Ul.appendChild($Li);                        
+                    }                 
+                    // 存储10个li的位置
+                    for (var i = 0; i < $LiCollection.length; i++) {
+                        arr.push( [ $LiCollection[i].offsetLeft, $LiCollection[i].offsetTop ] );                        
+                    }    
+                    for (var i = 0; i < $LiCollection.length; i++) {                        
+                        $LiCollection[i].style.position = 'absolute';
+                        $LiCollection[i].style.left = arr[i][0] + 'px';
+                        $LiCollection[i].style.top = arr[i][1] + 'px';
+                        $LiCollection[i].style.margin = 0;
+                    }                
+                    console.log($LiCollection)                                       
+                }else {                   
+                   // 每次运动都执行下面代码                   
+                   var timer = setInterval(function () {
+                       //下去
+                       startMove($LiCollection[iNow], {'left': 100, 'top': 500, 'opacity': 0});                      
+                       if (iNow == 0) {
+                          clearInterval(timer);
+                          
+                          // 回来                          
+                          iNow = num - 1;                          
+                          for (var i = 0; i < num; i++) {
+                              $LiCollection[i].innerHTML = json.title[(now - 1) * 8 + i];
+                          } 
+                          var timer2 = setInterval (function () {
+                              startMove($LiCollection[iNow], {'left': arr[iNow][0],'top': arr[iNow][1], 'opacity': 100});
+                              if (iNow === 0) {
+                                  clearInterval(timer2);
+                                  iNow = num - 1;
+                              }else {
+                                  iNow--; 
+                              }
+                          }, 100); 
+                       }else {
+                           iNow--;
+                       }
+                   },100); 
+                }                  
+            }
+        })                        
+    </script>
+</body>
+</html>
